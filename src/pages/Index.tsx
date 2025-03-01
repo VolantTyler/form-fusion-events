@@ -9,9 +9,6 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
-// Add framer-motion dependency
-<lov-add-dependency>framer-motion@^10.17.9</lov-add-dependency>
-
 const EventsPage = () => {
   const { signatureEvents, affiliateEvents, addEvent, deleteEvent } = useEvents();
   const [activeTab, setActiveTab] = useState<EventType>("signature");
