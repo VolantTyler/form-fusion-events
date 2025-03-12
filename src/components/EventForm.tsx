@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -90,7 +89,11 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
                 <FormItem>
                   <FormLabel>Event Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Annual Conference 2024" {...field} />
+                    <Input
+                      placeholder="Annual Conference 2024"
+                      {...field}
+                      data-testid="event-name"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -104,7 +107,11 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
                 <FormItem>
                   <FormLabel>Location</FormLabel>
                   <FormControl>
-                    <Input placeholder="Grand Hotel, New York" {...field} />
+                    <Input
+                      placeholder="Grand Hotel, New York"
+                      {...field}
+                      data-testid="event-location"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -126,6 +133,7 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
                             "w-full pl-3 text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
+                          data-testid="event-date"
                         >
                           {field.value ? (
                             format(field.value, "PPP")
@@ -163,6 +171,7 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
                         placeholder="4"
                         {...field}
                         className="pl-8"
+                        data-testid="event-duration"
                       />
                       <Clock className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     </div>
@@ -182,7 +191,11 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
                   <FormItem>
                     <FormLabel>Program Type</FormLabel>
                     <FormControl>
-                      <Input placeholder="Conference" {...field} />
+                      <Input
+                        placeholder="Conference"
+                        {...field}
+                        data-testid="event-description"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -196,7 +209,11 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
                   <FormItem>
                     <FormLabel>Program Type ID</FormLabel>
                     <FormControl>
-                      <Input placeholder="CONF-2024" {...field} />
+                      <Input
+                        placeholder="CONF-2024"
+                        {...field}
+                        data-testid="event-id"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -210,7 +227,11 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
                   <FormItem>
                     <FormLabel>Staff Advisor ID</FormLabel>
                     <FormControl>
-                      <Input placeholder="ADV-123" {...field} />
+                      <Input
+                        placeholder="ADV-123"
+                        {...field}
+                        data-testid="event-adv-id"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -219,7 +240,7 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
             </div>
           )}
 
-          <Button type="submit" className="w-full mt-6">
+          <Button type="submit" className="w-full mt-6" data-testid="submit-event">
             Create {type === "signature" ? "Signature" : "Affiliate"} Event
           </Button>
         </form>
