@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EventForm from "@/components/EventForm";
@@ -86,7 +85,7 @@ const EventsPage = () => {
               <p className="text-muted-foreground mb-4">
                 Create your first signature event to get started
               </p>
-              <Button onClick={() => setShowForm(true)} className="gap-1.5">
+              <Button onClick={() => setShowForm(true)} data-testid="create-signature-event" className="gap-1.5">
                 <PlusCircle className="h-4 w-4" />
                 Create Signature Event
               </Button>
@@ -107,7 +106,7 @@ const EventsPage = () => {
               <p className="text-muted-foreground mb-4">
                 Create your first affiliate event to get started
               </p>
-              <Button onClick={() => setShowForm(true)} className="gap-1.5">
+              <Button onClick={() => setShowForm(true)} data-testid="create-affiliate-event" className="gap-1.5">
                 <PlusCircle className="h-4 w-4" />
                 Create Affiliate Event
               </Button>

@@ -1,31 +1,28 @@
-describe('template spec', () => {
+describe('signature event spec', () => {
   it('passes', () => {
     cy.visit('https://example.cypress.io')
   })
 
-  /* ==== Test Created with Cypress Studio ==== */
-  it('creates a new signature event', function() {
-    /* ==== Generated with Cypress Studio ==== */
-    cy.visit('http://localhost:8080/');
-    cy.get('.text-center > .inline-flex').click();
-    cy.get('#\\:r4\\:-form-item').clear('co');
-    cy.get('#\\:r4\\:-form-item').type('conf1');
-    cy.get('#\\:r5\\:-form-item').clear();
-    cy.get('#\\:r5\\:-form-item').type('NYC');
-    cy.get('#\\:r6\\:-form-item').click();
-    cy.get(':nth-child(2) > :nth-child(4) > .rdp-button_reset').click();
-    cy.get('#\\:r8\\:-form-item > .flex').clear('12');
-    cy.get('#\\:r8\\:-form-item > .flex').type('12');
-    cy.get('#\\:r9\\:-form-item').clear('co');
-    cy.get('#\\:r9\\:-form-item').type('conference');
-    cy.get('#\\:ra\\:-form-item').clear();
-    cy.get('#\\:ra\\:-form-item').type('conf-1');
-    cy.get('#\\:rb\\:-form-item').clear();
-    cy.get('#\\:rb\\:-form-item').type('adv-1');
-    cy.get('.bg-primary').click();
-    cy.get('.text-2xl').should('have.text', 'conf1');
-    cy.get('.space-y-1\\.5 > .inline-flex').should('have.text', 'Signature Event');
-    cy.get('[data-lov-id="src/components/EventCard.tsx:88:16"] > .font-medium').should('have.text', 'conf-1');
-    /* ==== End Cypress Studio ==== */
+
+  it('signature-newevent-button', function() {
+    cy.visit('localhost:8080');
+    cy.get('.flex > .transition-colors').click();
+    cy.get('[data-testid="event-name"]').clear('C');
+    cy.get('[data-testid="event-name"]').type('Conf 2024');
+    cy.get('[data-testid="event-location"]').clear();
+    cy.get('[data-testid="event-location"]').type('Here');
+    cy.get('[data-testid="event-date"]').click();
+    cy.get(':nth-child(4) > :nth-child(6) > .rdp-button_reset').click();
+    cy.get('[data-testid="event-duration"]').clear('2');
+    cy.get('[data-testid="event-duration"]').type('2');
+    cy.get('[data-testid="event-description"]').clear('E');
+    cy.get('[data-testid="event-description"]').type('Event');
+    cy.get('[data-testid="event-id"]').clear();
+    cy.get('[data-testid="event-id"]').type('123');
+    cy.get('[data-testid="event-adv-id"]').clear();
+    cy.get('[data-testid="event-adv-id"]').type('098');
+    cy.get('[data-testid="submit-event"]').click();
+    cy.get('.text-2xl').should('have.text', 'Conf 2024');
+    cy.get('.space-y-1\\.5 > .inline-flex').should('be.visible');
   });
 })
