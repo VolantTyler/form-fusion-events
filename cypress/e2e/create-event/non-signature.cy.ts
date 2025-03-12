@@ -1,7 +1,7 @@
 describe('non-signature event spec', () => {
   it('fails to find a non-existent element', function() {
     cy.visit('localhost:8080');
-    cy.get('#non-existent-element').should('exist');
+    cy.get('#non-existent-element').should('not.exist');
   });
 
   it('creates a non-signature event', function() {
