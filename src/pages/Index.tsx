@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EventForm from "@/components/EventForm";
@@ -5,19 +6,41 @@ import EventCard from "@/components/EventCard";
 import { Event, EventType } from "@/types/event";
 import { useEvents } from "@/context/EventContext";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Edit } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const EventsPage = () => {
-  const { signatureEvents, affiliateEvents, addEvent, deleteEvent } = useEvents();
+  const { signatureEvents, affiliateEvents, addEvent, updateEvent, deleteEvent } = useEvents();
   const [activeTab, setActiveTab] = useState<EventType>("signature");
   const [showForm, setShowForm] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
   const handleSubmit = (data: Omit<Event, "type" | "id" | "createdAt">) => {
-    addEvent({
-      ...data,
-      type: activeTab,
-    } as Event);
+    if (editingEvent) {
+      // Update existing event
+      updateEvent(editingEvent.id!, {
+        ...data,
+        type: activeTab,
+      });
+      setEditingEvent(null);
+    } else {
+      // Create new event
+      addEvent({
+        ...data,
+        type: activeTab,
+      } as Event);
+    }
+    setShowForm(false);
+  };
+
+  const handleEdit = (event: Event) => {
+    setActiveTab(event.type);
+    setEditingEvent(event);
+    setShowForm(true);
+  };
+
+  const handleCancel = () => {
+    setEditingEvent(null);
     setShowForm(false);
   };
 
@@ -36,23 +59,33 @@ const EventsPage = () => {
         className="space-y-8"
         value={activeTab}
         onValueChange={(value) => {
-          setActiveTab(value as EventType);
-          setShowForm(false);
+          if (!editingEvent) {
+            setActiveTab(value as EventType);
+            setShowForm(false);
+          }
         }}
       >
         <div className="flex justify-between items-center mb-2">
           <TabsList className="grid grid-cols-2 w-[400px]">
-            <TabsTrigger value="signature">Signature Events</TabsTrigger>
-            <TabsTrigger value="affiliate">Affiliate Events</TabsTrigger>
+            <TabsTrigger value="signature" disabled={!!editingEvent}>Signature Events</TabsTrigger>
+            <TabsTrigger value="affiliate" disabled={!!editingEvent}>Affiliate Events</TabsTrigger>
           </TabsList>
           
           <Button
-            onClick={() => setShowForm(!showForm)}
-            variant={showForm ? "secondary" : "default"}
+            onClick={() => {
+              if (showForm && !editingEvent) {
+                setShowForm(false);
+              } else if (!editingEvent) {
+                setShowForm(true);
+                setEditingEvent(null);
+              }
+            }}
+            variant={showForm && !editingEvent ? "secondary" : "default"}
             className="gap-1.5"
+            disabled={!!editingEvent}
           >
             <PlusCircle className="h-4 w-4" />
-            {showForm ? "Cancel" : "New Event"}
+            {showForm && !editingEvent ? "Cancel" : "New Event"}
           </Button>
         </div>
         
@@ -67,13 +100,18 @@ const EventsPage = () => {
             >
               <div className="mb-4">
                 <h2 className="text-xl font-semibold mb-1">
-                  Create {activeTab === "signature" ? "Signature" : "Affiliate"} Event
+                  {editingEvent ? 'Edit' : 'Create'} {activeTab === "signature" ? "Signature" : "Affiliate"} Event
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  Fill out the form below to create a new event
+                  {editingEvent ? 'Update event details below' : 'Fill out the form below to create a new event'}
                 </p>
               </div>
-              <EventForm type={activeTab} onSubmit={handleSubmit} />
+              <EventForm 
+                type={activeTab} 
+                event={editingEvent || undefined} 
+                onSubmit={handleSubmit} 
+                onCancel={editingEvent ? handleCancel : undefined}
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -93,7 +131,12 @@ const EventsPage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {signatureEvents.map((event) => (
-                <EventCard key={event.id} event={event} onDelete={deleteEvent} />
+                <EventCard 
+                  key={event.id} 
+                  event={event} 
+                  onDelete={deleteEvent} 
+                  onEdit={handleEdit}
+                />
               ))}
             </div>
           )}
@@ -114,7 +157,12 @@ const EventsPage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {affiliateEvents.map((event) => (
-                <EventCard key={event.id} event={event} onDelete={deleteEvent} />
+                <EventCard 
+                  key={event.id} 
+                  event={event} 
+                  onDelete={deleteEvent}
+                  onEdit={handleEdit}
+                />
               ))}
             </div>
           )}

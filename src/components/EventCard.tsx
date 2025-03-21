@@ -1,7 +1,7 @@
 
 import React from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Clock, MapPin, X } from "lucide-react";
+import { CalendarIcon, Clock, MapPin, X, Edit } from "lucide-react";
 
 import { Event, isSignatureEvent } from "@/types/event";
 import { Button } from "@/components/ui/button";
@@ -20,9 +20,10 @@ import { cn } from "@/lib/utils";
 interface EventCardProps {
   event: Event;
   onDelete: (id: string) => void;
+  onEdit: (event: Event) => void;
 }
 
-const EventCard: React.FC<EventCardProps> = ({ event, onDelete }) => {
+const EventCard: React.FC<EventCardProps> = ({ event, onDelete, onEdit }) => {
   const isSignature = isSignatureEvent(event);
   const createdAt = event.createdAt 
     ? format(new Date(event.createdAt), "MMM d, yyyy") 
@@ -36,7 +37,15 @@ const EventCard: React.FC<EventCardProps> = ({ event, onDelete }) => {
         : "border-amber-100 dark:border-amber-900/30"
     )}>
       <CardHeader className="relative pb-2">
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 right-3 flex space-x-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 rounded-full opacity-70 hover:opacity-100 hover:bg-blue-100 hover:text-blue-600"
+            onClick={() => onEdit(event)}
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
           <Button
             variant="ghost"
             size="icon"

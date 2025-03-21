@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -48,30 +49,57 @@ const signatureSchema = baseSchema.extend({
 
 interface EventFormProps {
   type: EventType;
+  event?: Event;  // Optional event for editing mode
   onSubmit: (data: Omit<Event, "type" | "id" | "createdAt">) => void;
+  onCancel?: () => void;  // Optional cancel handler
 }
 
-const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
+const EventForm: React.FC<EventFormProps> = ({ type, event, onSubmit, onCancel }) => {
   // Use the appropriate schema based on event type
   const schema = type === "signature" ? signatureSchema : baseSchema;
+  
+  // Define form with either default values or values from the event being edited
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: "",
-      location: "",
-      duration: 1,
+      name: event?.name || "",
+      location: event?.location || "",
+      duration: event?.duration || 1,
+      date: event?.date ? new Date(event.date) : undefined,
       ...(type === "signature" && {
-        program_type_name: "",
-        program_type_id: "",
-        staff_advisor_id: "",
+        program_type_name: (event as SignatureEvent)?.program_type_name || "",
+        program_type_id: (event as SignatureEvent)?.program_type_id || "",
+        staff_advisor_id: (event as SignatureEvent)?.staff_advisor_id || "",
       }),
     },
   });
 
+  // Update form values when the event changes (for editing mode)
+  useEffect(() => {
+    if (event) {
+      const formValues: any = {
+        name: event.name,
+        location: event.location,
+        duration: event.duration,
+        date: event.date ? new Date(event.date) : undefined,
+      };
+      
+      if (type === "signature" && "program_type_name" in event) {
+        formValues.program_type_name = event.program_type_name;
+        formValues.program_type_id = event.program_type_id;
+        formValues.staff_advisor_id = event.staff_advisor_id;
+      }
+      
+      form.reset(formValues);
+    }
+  }, [event, form, type]);
+
   const handleSubmit = (data: z.infer<typeof schema>) => {
-    onSubmit(data);
-    form.reset();
-    toast.success(`${type === "signature" ? "Signature" : "Affiliate"} event created!`);
+    onSubmit(data as any);
+    if (!event) {
+      form.reset(); // Only reset if not in edit mode
+    }
+    toast.success(`${event ? 'Updated' : 'Created'} ${type === "signature" ? "signature" : "affiliate"} event!`);
   };
 
   return (
@@ -150,6 +178,7 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
                         selected={field.value}
                         onSelect={field.onChange}
                         initialFocus
+                        className="pointer-events-auto"
                       />
                     </PopoverContent>
                   </Popover>
@@ -240,9 +269,23 @@ const EventForm: React.FC<EventFormProps> = ({ type, onSubmit }) => {
             </div>
           )}
 
-          <Button type="submit" className="w-full mt-6" data-testid="submit-event">
-            Create {type === "signature" ? "Signature" : "Affiliate"} Event
-          </Button>
+          <div className="flex justify-end gap-2">
+            {onCancel && (
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+            )}
+            <Button 
+              type="submit" 
+              data-testid="submit-event"
+            >
+              {event ? 'Update' : 'Create'} {type === "signature" ? "Signature" : "Affiliate"} Event
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

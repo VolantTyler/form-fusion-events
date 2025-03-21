@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Event, SignatureEvent, AffiliateEvent } from "@/types/event";
 
@@ -6,6 +5,7 @@ interface EventContextType {
   signatureEvents: SignatureEvent[];
   affiliateEvents: AffiliateEvent[];
   addEvent: (event: Event) => void;
+  updateEvent: (id: string, eventData: Partial<Event>) => void;
   deleteEvent: (id: string) => void;
 }
 
@@ -57,13 +57,25 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const updateEvent = (id: string, eventData: Partial<Event>) => {
+    if (eventData.type === "signature" || (eventData.type === undefined && signatureEvents.some(e => e.id === id))) {
+      setSignatureEvents(prev => prev.map(event => 
+        event.id === id ? { ...event, ...eventData } as SignatureEvent : event
+      ));
+    } else {
+      setAffiliateEvents(prev => prev.map(event => 
+        event.id === id ? { ...event, ...eventData } as AffiliateEvent : event
+      ));
+    }
+  };
+
   const deleteEvent = (id: string) => {
     setSignatureEvents(prev => prev.filter(event => event.id !== id));
     setAffiliateEvents(prev => prev.filter(event => event.id !== id));
   };
 
   return (
-    <EventContext.Provider value={{ signatureEvents, affiliateEvents, addEvent, deleteEvent }}>
+    <EventContext.Provider value={{ signatureEvents, affiliateEvents, addEvent, updateEvent, deleteEvent }}>
       {children}
     </EventContext.Provider>
   );
