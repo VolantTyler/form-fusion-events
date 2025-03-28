@@ -15,7 +15,7 @@ describe('template spec', () => {
     cy.get('[data-testid="submit-event"]').click();
     cy.get('.space-y-1\\.5 > .inline-flex').should('be.visible');
     cy.get('.text-2xl').should('have.text', 'Affiliate 2024');
-    cy.get('.absolute > .inline-flex').click();
+    cy.get('[data-testid="delete-event-button"]').click();
     cy.get('#radix-\\:r0\\:-content-affiliate > .text-center > .text-lg').should('have.text', 'No Affiliate Events');
   });
 })
