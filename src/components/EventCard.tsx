@@ -37,22 +37,24 @@ const EventCard: React.FC<EventCardProps> = ({ event, onDelete, onEdit }) => {
         : "border-amber-100 dark:border-amber-900/30"
     )}>
       <CardHeader className="relative pb-2">
-        <div className="absolute top-3 right-3 flex space-x-1">
+        <div className="absolute right-2 top-2 flex space-x-1">
           <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 rounded-full opacity-70 hover:opacity-100 hover:bg-blue-100 hover:text-blue-600"
-            onClick={() => onEdit(event)}
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 rounded-full opacity-70 hover:opacity-100 hover:bg-blue-100 hover:text-blue-600"
+          onClick={() => onEdit(event)}
+          data-testid="edit-event-button"
           >
-            <Edit className="h-4 w-4" />
+          <Edit className="h-4 w-4" />
           </Button>
           <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 rounded-full opacity-70 hover:opacity-100 hover:bg-destructive hover:text-destructive-foreground"
-            onClick={() => onDelete(event.id || "")}
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 rounded-full opacity-70 hover:opacity-100 hover:bg-destructive hover:text-destructive-foreground"
+          onClick={() => onDelete(event.id || "")}
+          data-testid="delete-event-button"
           >
-            <X className="h-4 w-4" />
+          <X className="h-4 w-4" />
           </Button>
         </div>
         

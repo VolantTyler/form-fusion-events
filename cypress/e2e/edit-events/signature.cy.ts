@@ -9,7 +9,7 @@ describe('template spec', () => {
   /* ==== Test Created with Cypress Studio ==== */
   it('edit event', function() {
     /* ==== Generated with Cypress Studio ==== */
-    cy.get('.absolute > .hover\\:bg-blue-100').click();
+    cy.get('[data-testid="edit-event-button"]').click();
     cy.get('[data-testid="event-name"]').clear('Conf 2024');
     cy.get('[data-testid="event-name"]').type('Re-Conf 2024');
     cy.get('[data-testid="event-location"]').clear('Her');

@@ -18,7 +18,7 @@ describe('template spec', () => {
     cy.get('[data-testid="submit-event"]').click();
     cy.get('.text-2xl').should('have.text', 'signature-con');
     cy.get('.space-y-1\\.5 > .inline-flex').should('be.visible');
-    cy.get('.absolute > .inline-flex').click();
+    cy.get('[data-testid="delete-event-button"]').click();
     cy.get('#radix-\\:r0\\:-content-signature > .text-center > .text-lg').should('have.text', 'No Signature Events');
   });
 })
