@@ -6,7 +6,7 @@ describe('template spec', () => {
   it('delete signature event', function() {
     cy.visit('localhost:8080');
     cy.get('#radix-\\:r0\\:-trigger-signature').click();
-    cy.get('[data-testid="create-signature-event"]').click();
+    cy.get('[data-testid="create-signature-event-fail"]').click();
     cy.get('[data-testid="event-name"]').type('signature-con');
     cy.get('[data-testid="event-location"]').type('Anaheim');
     cy.get('[data-testid="event-date"]').click();

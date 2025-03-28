@@ -6,7 +6,7 @@ describe('template spec', () => {
   it('delete affiliate event', function() {
     cy.visit('localhost:8080');
     cy.get('#radix-\\:r0\\:-trigger-affiliate').click();
-    cy.get('[data-testid="create-affiliate-event"]').click();
+    cy.get('[data-testid="create-affiliate-event-fail"]').click();
     cy.get('[data-testid="event-name"]').type('Affiliate 2024');
     cy.get('[data-testid="event-location"]').type('New Jersey');
     cy.get('[data-testid="event-date"]').click();
